@@ -940,6 +940,7 @@
     document.body.classList.remove("app-ready");
     try {
       bindLanguageToggle();
+      syncLanguageClass();
       applyStaticCopy();
       markActiveNav();
       ensureDownloadDock();
@@ -962,6 +963,7 @@
     button.addEventListener("click", () => {
       currentLang = currentLang === "en" ? "zh" : "en";
       localStorage.setItem("filestream-language", currentLang);
+      syncLanguageClass();
       applyToolCopy(currentLang);
       applyStaticCopy();
       if ($("#workspaceApp")) {
@@ -977,6 +979,11 @@
   function setText(selector, value) {
     const node = $(selector);
     if (node) node.textContent = value;
+  }
+
+  function syncLanguageClass() {
+    document.body.classList.toggle("lang-zh", currentLang === "zh");
+    document.body.classList.toggle("lang-en", currentLang !== "zh");
   }
 
   function applyStaticCopy() {
@@ -1106,7 +1113,7 @@
         <div class="tool-icon"><span class="material-symbols-outlined">${tool.icon}</span></div>
         <span class="chip">${tool.group}</span>
       </div>
-      <div>
+      <div class="tool-card-copy">
         <h3>${tool.label}</h3>
         <p>${tool.description}</p>
       </div>
