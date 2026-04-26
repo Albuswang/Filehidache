@@ -1,0 +1,96 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Filehidache - File Processing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/app.css">
+</head>
+<body data-page="tools">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true"><img class="brand-logo" src="assets/filehidache-logo.png" alt=""></span>
+        <span>Filehidache</span>
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="index.html">Tools</a>
+        <a href="compress.html">Compress</a>
+        <a href="convert.html">Convert</a>
+        <a href="merge.html">Organize</a>
+        <a href="security.html">Security</a>
+      </nav>
+      <div class="account-actions">
+        <button id="languageToggle" class="lang-toggle" type="button" aria-label="Switch language">中文</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow"><span class="material-symbols-outlined">bolt</span>Local-first file workflow</span>
+          <h1>File processing, reduced to three elegant steps.</h1>
+          <p>Upload files, choose a dedicated tool, then download the finished output. Conversion, compression, PDF organization, and security tools now live on focused pages.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#tools">
+              <span class="material-symbols-outlined">apps</span>
+              Browse tools
+            </a>
+          </div>
+          <div class="trust-row">
+            <span><span class="material-symbols-outlined">verified</span>Download-ready output</span>
+            <span><span class="material-symbols-outlined">lock</span>Browser-first processing</span>
+            <span><span class="material-symbols-outlined">view_module</span>Dedicated workspaces</span>
+          </div>
+        </div>
+        <div class="hero-card hero-art" aria-hidden="true">
+          <div class="art-orbit art-orbit-one"></div>
+          <div class="art-orbit art-orbit-two"></div>
+          <div class="art-glass art-glass-main">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="art-glass art-glass-side">
+            <span></span>
+            <span></span>
+          </div>
+          <div class="art-core">
+            <span class="material-symbols-outlined">folder_managed</span>
+          </div>
+          <div class="art-dot art-dot-one"></div>
+          <div class="art-dot art-dot-two"></div>
+          <div class="art-dot art-dot-three"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tools" class="section section-muted tool-library-section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Tool Library</h2>
+          </div>
+        </div>
+        <div id="toolGrid" class="tool-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <strong>Filehidache</strong>
+      <span>Files are used for the current session only. Output is ready for direct download.</span>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
+

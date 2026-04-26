@@ -1,0 +1,58 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Security Workspace - Filehidache</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/app.css">
+</head>
+<body data-page="security">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><img class="brand-logo" src="assets/filehidache-logo.png" alt=""></span><span>Filehidache</span></a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="index.html">Tools</a>
+        <a href="compress.html">Compress</a>
+        <a href="convert.html">Convert</a>
+        <a href="merge.html">Organize</a>
+        <a href="security.html">Security</a>
+      </nav>
+      <div class="account-actions"><a class="ghost-link" href="index.html">Home</a><button id="languageToggle" class="lang-toggle" type="button" aria-label="Switch language">中文</button></div>
+    </div>
+  </header>
+  <main id="workspaceApp">
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow"><span class="material-symbols-outlined">shield_lock</span>Security Workspace</span>
+        <h1 id="pageTitle">Security Workspace</h1>
+        <p id="pageIntro">Dedicated entry points for PDF protection and unlocking workflows.</p>
+      </div>
+    </section>
+    <section class="container workspace">
+      <aside class="panel sticky"><div class="rail-title">Security tools</div><div id="toolRail" class="tool-rail"></div></aside>
+      <section>
+        <input id="fileInput" type="file" hidden>
+        <div class="workspace-title"><div><h2 id="toolTitle">Tool</h2><p id="toolDescription">Upload files and start processing.</p></div><span id="statusPill" class="status-pill">Ready</span></div>
+        <div id="toolBadges" class="chip-row"></div>
+        <div id="messageBox" class="message">Security tools have their own page. Encryption and unlocking require a password-aware PDF engine.</div>
+        <div id="dropzone" class="dropzone"><span class="upload-orb"><span class="material-symbols-outlined" style="font-size:40px">upload_file</span></span><h3 id="dropTitle">Upload files</h3><p id="dropDescription">Supported formats change with the selected tool.</p><div id="dropHelp" class="chip-row"></div><button id="pickFilesButton" type="button" class="btn btn-secondary" style="margin-top:18px">Browse files</button></div>
+        <div class="panel queue-panel" style="margin-top:20px"><div class="workspace-title"><div><h2 id="queueTitle" style="font-size:24px">Files to process</h2><p id="queueMeta">0 files</p></div></div><div id="queueList" class="queue"></div></div>
+      </section>
+      <aside>
+        <div class="panel sticky"><div class="rail-title">Settings</div><div id="paramList" class="params"></div><div class="aside-actions"><button id="startButton" type="button" class="btn btn-primary"><span class="material-symbols-outlined">bolt</span>Start processing</button><button id="clearButton" type="button" class="btn btn-secondary"><span class="material-symbols-outlined">delete</span>Clear workspace</button></div><p id="tipBox" class="tip">Tool notes will appear here.</p></div>
+        <div class="panel" style="margin-top:20px"><div class="workspace-title"><div><h2 style="font-size:24px">Downloads</h2><p>Security outputs will appear here after the production engine is connected.</p></div><button id="downloadAllButton" type="button" class="btn btn-secondary">Download all</button></div><div id="downloadSummary" class="download-summary"><strong id="summaryName">-</strong><p id="summaryMeta" class="result-meta">-</p><button id="downloadLatestButton" type="button" class="btn btn-primary" style="width:100%">Download latest file</button></div><div id="resultList" class="results-list"></div></div>
+      </aside>
+    </section>
+  </main>
+  <footer class="footer"><div class="container footer-inner"><strong>Filehidache</strong><span>Security operations should use a reliable encryption engine.</span></div></footer>
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
+
