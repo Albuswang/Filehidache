@@ -8,9 +8,9 @@
       icon: "description",
       label: "Word 转 PDF",
       description: "提取 DOCX 文档文字并生成可下载 PDF，适合轻量文档和快速归档。",
-      accept: ".doc,.docx",
+      accept: ".docx",
       multiple: true,
-      badges: ["DOC / DOCX", "批量", "PDF"],
+      badges: ["DOCX", "批量", "PDF"],
       help: ["建议使用 .docx", "浏览器本地处理", "处理后可下载"],
       tip: "浏览器版会提取正文生成简洁 PDF；复杂排版、页眉页脚和字体完全还原仍建议接入服务端 Office 渲染引擎。",
       params: [
@@ -216,7 +216,7 @@
       tip: "如果只要旋转部分页面，请填写页码范围，例如 2,4-6。",
       params: [
         { id: "pages", label: "旋转页码", type: "text", value: "", placeholder: "留空全部，例如 2,4-6" },
-        { id: "angle", label: "旋转角度", type: "select", options: ["90", "180", "270"] },
+        { id: "angle", label: "旋转角度", type: "select", options: ["顺时针 90°", "顺时针 180°", "顺时针 270°", "逆时针 90°", "逆时针 180°", "逆时针 270°"] },
         { id: "outputName", label: "输出文件名", type: "text", value: "rotated_pdf" }
       ],
       mode: "pdfRotate"
@@ -263,7 +263,7 @@
       icon: "draft",
       label: "Word / PPT 瘦身",
       description: "重压缩 DOCX / PPTX 内嵌图片并重新打包，减小文档体积。",
-      accept: ".doc,.docx,.ppt,.pptx",
+      accept: ".docx",
       multiple: true,
       badges: ["DOCX / PPTX", "图片重压缩", "保持可编辑"],
       help: ["建议 DOCX / PPTX", "批量", "新文件下载"],
@@ -448,7 +448,7 @@
       tip: "如果只处理部分页面，请填写页码范围，例如 2,4-6。",
       params: [
         { id: "pages", label: "要旋转的页码", type: "text", value: "", placeholder: "留空为全部，例如 2,4-6" },
-        { id: "angle", label: "旋转角度", type: "select", options: ["90", "180", "270"] },
+        { id: "angle", label: "旋转角度", type: "select", options: ["顺时针 90°", "顺时针 180°", "顺时针 270°", "逆时针 90°", "逆时针 180°", "逆时针 270°"] },
         { id: "outputName", label: "输出文件名", type: "text", value: "rotated_pdf" }
       ]
     },
@@ -520,7 +520,7 @@
   applyToolCopy(currentLang);
 
   const pageTools = {
-    convert: ["wordToPdf", "imageToPdf", "pdfToImage", "pdfToWord", "pdfToExcel", "pdfToPpt", "pptToPdf", "excelToPdf"],
+    convert: ["wordToPdf", "imageToPdf", "pdfToImage", "pdfToPpt", "excelToPdf"],
     compress: ["pdfCompress", "imageCompress", "docCompress"],
     merge: ["pdfMerge", "pdfSplit", "pdfDelete", "pdfSort", "pdfRotate"],
     security: ["protectPdf", "unlockPdf"]
@@ -548,10 +548,10 @@
       wordToPdf: {
         group: "Convert to PDF",
         label: "Word to PDF",
-        description: "Extract text from DOCX files and generate a clean, downloadable PDF.",
-        badges: ["DOC / DOCX", "Batch", "PDF"],
-        help: ["DOCX recommended", "Local workflow", "Download ready"],
-        tip: "This browser workflow creates a clean text-based PDF. Exact Word layout rendering still requires an Office rendering engine.",
+        description: "Convert DOCX content locally into image-based PDF pages without a plugin.",
+        badges: ["DOCX", "Batch", "PDF"],
+        help: ["DOCX only", "Browser local", "Download ready"],
+        tip: "This browser workflow renders text into PDF page images to avoid font encoding issues. Legacy .doc needs an Office plugin or backend engine.",
         params: [{ id: "outputName", label: "Output name", type: "text", value: "word_to_pdf" }]
       },
       imageToPdf: {
@@ -681,7 +681,7 @@
         tip: "Leave page range blank to rotate every page.",
         params: [
           { id: "pages", label: "Pages to rotate", type: "text", value: "", placeholder: "Blank for all, e.g. 2,4-6" },
-          { id: "angle", label: "Angle", type: "select", options: ["90", "180", "270"] },
+          { id: "angle", label: "Angle", type: "select", options: ["Clockwise 90°", "Clockwise 180°", "Clockwise 270°", "Counterclockwise 90°", "Counterclockwise 180°", "Counterclockwise 270°"] },
           { id: "outputName", label: "Output name", type: "text", value: "rotated_pdf" }
         ]
       },
@@ -713,11 +713,11 @@
       },
       docCompress: {
         group: "Compression",
-        label: "Word / PPT Slim",
-        description: "Recompress embedded images in DOCX / PPTX files and rebuild the package.",
-        badges: ["DOCX / PPTX", "Media recompress", "Editable"],
-        help: ["DOCX / PPTX", "Batch", "Download output"],
-        tip: "Legacy .doc and .ppt files require desktop or server-side tooling.",
+        label: "Word Slim",
+        description: "Recompress embedded images in DOCX files and rebuild the package.",
+        badges: ["DOCX", "Media recompress", "Editable"],
+        help: ["DOCX only", "Batch", "Download output"],
+        tip: "Legacy .doc files require a plugin or backend Office engine.",
         params: [
           { id: "level", label: "Compression level", type: "select", options: ["Light", "Balanced", "Strong"] },
           { id: "maxWidth", label: "Embedded image max width", type: "select", options: ["Keep original width", "2400", "1920", "1280", "960"] },
@@ -733,6 +733,7 @@
         tip: "Reliable PDF encryption requires a security-capable PDF engine. The UI is ready for that production module.",
         params: [
           { id: "password", label: "Open password", type: "text", value: "", placeholder: "Enter password" },
+          { id: "engineUrl", label: "Engine URL", type: "text", value: "/api/filehidache/engine" },
           { id: "outputName", label: "Output name", type: "text", value: "protected_pdf" }
         ]
       },
@@ -745,6 +746,7 @@
         tip: "Encrypted PDFs require a password-aware PDF engine. The workspace and validation flow are ready.",
         params: [
           { id: "password", label: "Current password", type: "text", value: "", placeholder: "Enter password" },
+          { id: "engineUrl", label: "Engine URL", type: "text", value: "/api/filehidache/engine" },
           { id: "outputName", label: "Output name", type: "text", value: "unlocked_pdf" }
         ]
       }
@@ -1101,7 +1103,7 @@
     const grid = $("#toolGrid");
     if (!grid) return;
     grid.innerHTML = "";
-    Object.entries(tools).forEach(([key, tool]) => grid.appendChild(createToolCard(key, tool)));
+    Object.values(pageTools).flat().forEach((key) => grid.appendChild(createToolCard(key, tools[key])));
   }
 
   function createToolCard(key, tool) {
@@ -1316,7 +1318,7 @@
     meta.textContent = currentLang === "zh" ? `${state.queue.length} 个文件 · ${formatBytes(total)} · ${state.busy ? "处理中" : "待处理"}` : `${state.queue.length} file(s) · ${formatBytes(total)} · ${state.busy ? "Processing" : "Ready"}`;
     updateCompressionStats();
     if (!state.queue.length) {
-      list.innerHTML = `<div class="file-row"><div class="file-main"><div class="file-name">${currentLang === "zh" ? "还没有文件" : "No files yet"}</div><div class="file-meta">${currentLang === "zh" ? "上传后的文件会出现在这里，可调整顺序或移除。" : "Uploaded files will appear here for ordering and removal."}</div></div></div>`;
+      list.innerHTML = `<div class="file-row"><div class="file-main"><div class="file-name">${currentLang === "zh" ? "还没有文件" : "No files yet"}</div><div class="file-meta">${currentLang === "zh" ? "上传后的文件会出现在这里，可调整顺序或移除。" : "Uploaded files will appear here for ordering and removal."}</div></div>`;
       return;
     }
     list.innerHTML = "";
@@ -1405,7 +1407,7 @@
       $("#summaryMeta").textContent = `${formatBytes(latest.blob.size)} · ${latest.note || (currentLang === "zh" ? "可下载" : "Ready to download")}`;
     }
     if (!state.results.length) {
-      list.innerHTML = `<div class="result-row"><div class="result-main"><div class="result-name">${currentLang === "zh" ? "暂无结果" : "No output yet"}</div><div class="result-meta">${currentLang === "zh" ? "处理完成后，下载按钮会显示在这里。" : "Processed files will appear here with direct browser download buttons."}</div></div></div>`;
+      list.innerHTML = `<div class="result-empty"><div class="result-name">${currentLang === "zh" ? "暂无结果" : "No output yet"}</div><div class="result-meta">${currentLang === "zh" ? "处理完成后，下载按钮会显示在这里。" : "Processed files will appear here with direct browser download buttons."}</div></div>`;
       updateCompressionStats();
       updateDownloadDock();
       return;
@@ -1651,18 +1653,44 @@
       case "pdfCompress": return [await resultFromBlob(await compressPdf(files[0], params), withExt(params.outputName || "compressed_pdf", "pdf"), currentLang === "zh" ? "PDF 已压缩" : "PDF compressed")];
       case "imageCompress": return compressImages(files, params);
       case "docCompress": return compressOfficeDocs(files, params);
-      case "wordToPdf": return officeTextToPdfBatch(files, params, "word");
-      case "pptToPdf": return officeTextToPdfBatch(files, params, "ppt");
-      case "excelToPdf": return officeTextToPdfBatch(files, params, "excel");
-      case "pdfToWord": return pdfToWordDocs(files, params);
-      case "pdfToExcel": return pdfToCsvFiles(files, params);
+      case "wordToPdf": return wordToPdfFiles(files, params);
+      case "excelToPdf": return excelToPdfBatch(files, params);
       case "pdfToPpt": return pdfToPptFiles(files, params);
-      case "protectPdf":
-      case "unlockPdf":
-        throw new Error(currentLang === "zh" ? "PDF 加密和解密需要支持密码的安全引擎，纯前端无法可靠完成。" : "PDF protection and unlocking require a password-aware PDF security engine. The workspace is ready, but pure front-end code cannot reliably perform this operation.");
+      case "protectPdf": return backendEngineRequest("protectPdf", files, params);
+      case "unlockPdf": return backendEngineRequest("unlockPdf", files, params);
       default:
         throw new Error(currentLang === "zh" ? "该工具暂未接入处理能力。" : "This tool does not have a processor yet.");
     }
+  }
+
+  function isLegacyOfficeFile(file) {
+    return /\.(doc|ppt|xls)$/i.test(file?.name || "");
+  }
+
+  function backendEngineUrl(params = {}) {
+    return params.engineUrl || window.FILEHIDACHE_ENGINE_URL || localStorage.getItem("filehidache-engine-url") || "/api/filehidache/engine";
+  }
+
+  async function backendEngineRequest(operation, files, params) {
+    const form = new FormData();
+    form.append("operation", operation);
+    form.append("params", JSON.stringify(params || {}));
+    files.forEach((file) => form.append("files", file, file.name));
+    let response;
+    try {
+      response = await fetch(backendEngineUrl(params), { method: "POST", body: form });
+    } catch (error) {
+      throw new Error(currentLang === "zh" ? "需要接入后端安全/Office 引擎后才能处理该格式或加密任务。" : "A backend security/Office engine is required for this format or protection task.");
+    }
+    if (!response.ok) {
+      throw new Error(currentLang === "zh" ? "后端安全/Office 引擎未就绪或处理失败。" : "The backend security/Office engine is not ready or failed to process the file.");
+    }
+    const blob = await response.blob();
+    const disposition = response.headers.get("content-disposition") || "";
+    const headerName = disposition.match(/filename="?([^"]+)"?/i)?.[1];
+    const fallbackExt = operation.includes("Pdf") || operation.includes("PDF") ? "pdf" : "bin";
+    const name = headerName || `${operation}_${Date.now()}.${fallbackExt}`;
+    return [await resultFromBlob(blob, name, "Processed by backend engine")];
   }
 
   async function imageToPdf(files, params) {
@@ -1781,8 +1809,15 @@
   async function rotatePdfPages(file, params) {
     const pdf = await PDFLib.PDFDocument.load(await file.arrayBuffer());
     const pages = params.pages ? parsePages(params.pages, pdf.getPageCount(), false) : range(1, pdf.getPageCount());
-    pages.forEach((num) => pdf.getPage(num - 1).setRotation(PDFLib.degrees(Number(params.angle || 90))));
+    pages.forEach((num) => pdf.getPage(num - 1).setRotation(PDFLib.degrees(rotationDegrees(params.angle))));
     return blobFromBytes(await pdf.save(), "application/pdf");
+  }
+
+  function rotationDegrees(value) {
+    const text = String(value || "90");
+    const degrees = Number(text.match(/\d+/)?.[0] || 90);
+    const counterclockwise = /逆时针|Counterclockwise/i.test(text);
+    return counterclockwise ? (360 - degrees) % 360 : degrees % 360;
   }
 
   async function compressPdf(file, params) {
@@ -1879,6 +1914,9 @@
     const maxWidth = (params.maxWidth === "Keep original width" || params.maxWidth === "保持原宽") ? Infinity : Number(params.maxWidth);
     for (const file of files) {
       const ext = file.name.split(".").pop().toLowerCase();
+      if (isLegacyOfficeFile(file)) {
+        throw new Error(currentLang === "zh" ? ".doc 格式需要插件或后端 Office 引擎支持；Word Slim 当前只支持 .docx。" : ".doc files require a plugin or backend Office engine. Word Slim currently supports .docx only.");
+      }
       if (!["docx", "pptx"].includes(ext)) throw new Error(currentLang === "zh" ? `${file.name} 是旧版 Office 格式。请上传 .docx 或 .pptx。` : `${file.name} is a legacy Office format. Upload .docx or .pptx for browser-side slimming.`);
       const zip = await JSZip.loadAsync(await file.arrayBuffer());
       const media = Object.values(zip.files).filter((entry) => /\/media\/.+\.(png|jpe?g|webp)$/i.test(entry.name));
@@ -1902,9 +1940,107 @@
   async function officeTextToPdfBatch(files, params, kind) {
     const results = [];
     for (const file of files) {
+      if (isLegacyOfficeFile(file)) throw new Error(currentLang === "zh" ? ".doc 格式需要 Office 插件或后端引擎；当前免插件转换支持 .docx。" : ".doc files require an Office plugin or backend engine. Plugin-free conversion supports .docx.");
       const text = await extractOfficeText(file, kind);
-      const blob = await textToPdf(`${tools[state.activeTool].label} - ${file.name}`, text);
+      const blob = await textToPdf(`${tools[state.activeTool].label} - ${file.name}`, text, { preserveUnicode: true });
       results.push(await resultFromBlob(blob, `${params.outputName || baseName(file.name)}_${baseName(file.name)}.pdf`, currentLang === "zh" ? "PDF 已生成" : "PDF generated"));
+    }
+    return results;
+  }
+
+  async function wordToPdfFiles(files, params) {
+    if (!window.docx?.renderAsync || !window.html2canvas) {
+      throw new Error(currentLang === "zh" ? "Word 页面渲染组件加载失败，请检查网络后重试。" : "The Word page renderer failed to load. Check the network and try again.");
+    }
+    const results = [];
+    for (const file of files) {
+      if (isLegacyOfficeFile(file)) throw new Error(currentLang === "zh" ? ".doc 格式需要 Office 插件或后端引擎；当前免插件转换支持 .docx。" : ".doc files require an Office plugin or backend engine. Plugin-free conversion supports .docx.");
+      const blob = await renderDocxPagesToPdf(file);
+      results.push(await resultFromBlob(blob, `${params.outputName || "word_to_pdf"}_${baseName(file.name)}.pdf`, currentLang === "zh" ? "Word 页面已截图生成 PDF" : "Word pages captured to PDF"));
+    }
+    return results;
+  }
+
+  async function renderDocxPagesToPdf(file) {
+    const host = document.createElement("div");
+    host.className = "docx-render-host";
+    document.body.appendChild(host);
+    try {
+      await window.docx.renderAsync(await file.arrayBuffer(), host, null, {
+        breakPages: true,
+        ignoreWidth: false,
+        ignoreHeight: false,
+        ignoreFonts: false,
+        renderHeaders: true,
+        renderFooters: true,
+        renderFootnotes: true,
+        renderEndnotes: true,
+        useBase64URL: true
+      });
+      await waitForRenderableContent(host);
+      const pageNodes = Array.from(host.querySelectorAll(".docx-wrapper section.docx, section.docx"));
+      const pages = pageNodes.length ? pageNodes : [host];
+      const pdf = await PDFLib.PDFDocument.create();
+      for (const pageNode of pages) {
+        const captureScale = Math.max(4, Math.min(5, window.devicePixelRatio || 1));
+        const canvas = await window.html2canvas(pageNode, {
+          backgroundColor: "#ffffff",
+          scale: captureScale,
+          useCORS: true,
+          logging: false
+        });
+        const png = await canvasToBlob(canvas, "image/png", 0.92);
+        const image = await pdf.embedPng(new Uint8Array(await png.arrayBuffer()));
+        const rect = pageNode.getBoundingClientRect();
+        const pageWidth = rect.width || canvas.width / captureScale;
+        const pageHeight = rect.height || canvas.height / captureScale;
+        const pdfPage = pdf.addPage([pageWidth, pageHeight]);
+        pdfPage.drawImage(image, { x: 0, y: 0, width: pageWidth, height: pageHeight });
+      }
+      return blobFromBytes(await pdf.save(), "application/pdf");
+    } finally {
+      host.remove();
+    }
+  }
+
+  async function waitForRenderableContent(root) {
+    if (document.fonts?.ready) await document.fonts.ready.catch(() => {});
+    const images = Array.from(root.querySelectorAll("img"));
+    await Promise.all(images.map((img) => {
+      if (img.complete) return Promise.resolve();
+      return new Promise((resolve) => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    }));
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  }
+
+  async function pptToPdfBatch(files, params) {
+    const results = [];
+    for (const file of files) {
+      if (isLegacyOfficeFile(file)) {
+        results.push(...await backendEngineRequest("pptToPdf", [file], params));
+        continue;
+      }
+      const slides = await extractPptSlides(file);
+      const blob = await slidesToPdf(slides, file.name);
+      results.push(await resultFromBlob(blob, `${params.outputName || "ppt_to_pdf"}_${baseName(file.name)}.pdf`, "One slide per PDF page"));
+    }
+    return results;
+  }
+
+  async function excelToPdfBatch(files, params) {
+    const results = [];
+    for (const file of files) {
+      const ext = file.name.split(".").pop().toLowerCase();
+      if (ext === "xls") {
+        results.push(...await backendEngineRequest("excelToPdf", [file], params));
+        continue;
+      }
+      const sheets = ext === "csv" ? [{ name: baseName(file.name), rows: csvRows(await file.text()) }] : await extractXlsxSheets(file);
+      const blob = await sheetsToPdf(sheets, file.name);
+      results.push(await resultFromBlob(blob, `${params.outputName || "excel_to_pdf"}_${baseName(file.name)}.pdf`, "Sheet data paginated to PDF"));
     }
     return results;
   }
@@ -1912,8 +2048,7 @@
   async function pdfToWordDocs(files, params) {
     const results = [];
     for (const file of files) {
-      const text = await extractPdfText(file);
-      const html = `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(file.name)}</title></head><body><h1>${escapeHtml(file.name)}</h1>${text.split("\n").map((line) => `<p>${escapeHtml(line) || "&nbsp;"}</p>`).join("")}</body></html>`;
+      const html = await pdfToPositionedWordHtml(file);
       results.push(await resultFromBlob(new Blob([html], { type: "application/msword;charset=utf-8" }), `${params.outputName || "pdf_to_word"}_${baseName(file.name)}.doc`, currentLang === "zh" ? "Word 文档已导出" : "Word-openable document exported"));
     }
     return results;
@@ -1933,7 +2068,7 @@
     const results = [];
     for (const file of files) {
       const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
-      let html = "<html><head><meta charset='utf-8'><style>body{margin:0;background:#111}.slide{width:1280px;height:720px;display:flex;align-items:center;justify-content:center;page-break-after:always;background:#fff}img{max-width:100%;max-height:100%}</style></head><body>";
+      const slides = [];
       for (let i = 1; i <= pdf.numPages; i += 1) {
         const page = await pdf.getPage(i);
         const viewport = page.getViewport({ scale: 1.35 });
@@ -1941,12 +2076,174 @@
         canvas.width = viewport.width;
         canvas.height = viewport.height;
         await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
-        html += `<div class="slide"><img src="${canvas.toDataURL("image/png")}"></div>`;
+        const image = await canvasToBlob(canvas, "image/png", 0.92);
+        slides.push({ bytes: await image.arrayBuffer(), width: canvas.width, height: canvas.height });
       }
-      html += "</body></html>";
-      results.push(await resultFromBlob(new Blob([html], { type: "application/vnd.ms-powerpoint;charset=utf-8" }), `${params.outputName || "pdf_to_ppt"}_${baseName(file.name)}.ppt`, currentLang === "zh" ? "图片型 PPT 已导出" : "Image-based PowerPoint exported"));
+      const blob = await buildImagePptx(slides, file.name);
+      results.push(await resultFromBlob(blob, `${params.outputName || "pdf_to_ppt"}_${baseName(file.name)}.pptx`, "Image-based PowerPoint exported"));
     }
     return results;
+  }
+
+  async function pdfToPositionedWordHtml(file) {
+    const pdf = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    const pages = [];
+    for (let i = 1; i <= pdf.numPages; i += 1) {
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({ scale: 1 });
+      const content = await page.getTextContent();
+      const items = content.items.map((item) => {
+        const tx = pdfjsLib.Util.transform(viewport.transform, item.transform);
+        const fontSize = Math.max(8, Math.hypot(tx[2], tx[3]));
+        return `<span style="left:${tx[4].toFixed(2)}px;top:${(viewport.height - tx[5]).toFixed(2)}px;font-size:${fontSize.toFixed(2)}px;font-family:Arial,Microsoft YaHei,sans-serif;">${escapeHtml(item.str)}</span>`;
+      }).join("");
+      pages.push(`<section class="pdf-page" style="width:${viewport.width}px;height:${viewport.height}px">${items}</section>`);
+    }
+    return `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(file.name)}</title><style>body{margin:0;background:#e5e7eb}.pdf-page{position:relative;margin:24px auto;background:white;page-break-after:always;overflow:hidden}.pdf-page span{position:absolute;white-space:pre;line-height:1;color:#111827}</style></head><body>${pages.join("")}</body></html>`;
+  }
+
+  async function buildImagePptx(slides, sourceName) {
+    const zip = new JSZip();
+    const slideSize = { cx: 12192000, cy: 6858000 };
+    const created = new Date().toISOString();
+    const slideOverrides = slides.map((_, index) => `<Override PartName="/ppt/slides/slide${index + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>`).join("");
+
+    zip.file("[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Default Extension="png" ContentType="image/png"/>
+  <Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>
+  <Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>
+  <Override PartName="/ppt/presentation.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"/>
+  <Override PartName="/ppt/slideMasters/slideMaster1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/>
+  <Override PartName="/ppt/slideLayouts/slideLayout1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"/>
+  <Override PartName="/ppt/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/>
+  ${slideOverrides}
+</Types>`);
+    zip.file("_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="ppt/presentation.xml"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>
+  <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>
+</Relationships>`);
+    zip.file("docProps/app.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">
+  <Application>Filehidache</Application>
+  <PresentationFormat>On-screen Show (16:9)</PresentationFormat>
+  <Slides>${slides.length}</Slides>
+</Properties>`);
+    zip.file("docProps/core.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <dc:title>${escapeHtml(sourceName)}</dc:title>
+  <dc:creator>Filehidache</dc:creator>
+  <cp:lastModifiedBy>Filehidache</cp:lastModifiedBy>
+  <dcterms:created xsi:type="dcterms:W3CDTF">${created}</dcterms:created>
+  <dcterms:modified xsi:type="dcterms:W3CDTF">${created}</dcterms:modified>
+</cp:coreProperties>`);
+    zip.file("ppt/presentation.xml", buildPresentationXml(slides.length, slideSize));
+    zip.file("ppt/_rels/presentation.xml.rels", buildPresentationRels(slides.length));
+    zip.file("ppt/slideMasters/slideMaster1.xml", buildSlideMasterXml());
+    zip.file("ppt/slideMasters/_rels/slideMaster1.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="../theme/theme1.xml"/>
+</Relationships>`);
+    zip.file("ppt/slideLayouts/slideLayout1.xml", buildSlideLayoutXml());
+    zip.file("ppt/slideLayouts/_rels/slideLayout1.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster" Target="../slideMasters/slideMaster1.xml"/>
+</Relationships>`);
+    zip.file("ppt/theme/theme1.xml", buildThemeXml());
+
+    slides.forEach((slide, index) => {
+      const slideNumber = index + 1;
+      zip.file(`ppt/slides/slide${slideNumber}.xml`, buildImageSlideXml(slideNumber, slide, slideSize));
+      zip.file(`ppt/slides/_rels/slide${slideNumber}.xml.rels`, `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/>
+  <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image${slideNumber}.png"/>
+</Relationships>`);
+      zip.file(`ppt/media/image${slideNumber}.png`, slide.bytes);
+    });
+
+    return zip.generateAsync({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.presentationml.presentation" });
+  }
+
+  function buildPresentationXml(slideCount, slideSize) {
+    const slideIds = range(1, slideCount).map((slideNumber) => `<p:sldId id="${255 + slideNumber}" r:id="rId${slideNumber + 1}"/>`).join("");
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<p:presentation xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main">
+  <p:sldMasterIdLst><p:sldMasterId id="2147483648" r:id="rId1"/></p:sldMasterIdLst>
+  <p:sldIdLst>${slideIds}</p:sldIdLst>
+  <p:sldSz cx="${slideSize.cx}" cy="${slideSize.cy}" type="wide"/>
+  <p:notesSz cx="6858000" cy="9144000"/>
+</p:presentation>`;
+  }
+
+  function buildPresentationRels(slideCount) {
+    const slideRels = range(1, slideCount).map((slideNumber) => `<Relationship Id="rId${slideNumber + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide" Target="slides/slide${slideNumber}.xml"/>`).join("");
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster" Target="slideMasters/slideMaster1.xml"/>
+  ${slideRels}
+</Relationships>`;
+  }
+
+  function buildImageSlideXml(slideNumber, slide, slideSize) {
+    const box = containBox(slide.width, slide.height, slideSize.cx, slideSize.cy);
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main">
+  <p:cSld>
+    <p:bg><p:bgPr><a:solidFill><a:srgbClr val="FFFFFF"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>
+    <p:spTree>
+      <p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr>
+      <p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/><a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr>
+      <p:pic>
+        <p:nvPicPr><p:cNvPr id="${slideNumber + 1}" name="Page ${slideNumber}"/><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr>
+        <p:blipFill><a:blip r:embed="rId2"/><a:stretch><a:fillRect/></a:stretch></p:blipFill>
+        <p:spPr><a:xfrm><a:off x="${box.x}" y="${box.y}"/><a:ext cx="${box.cx}" cy="${box.cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr>
+      </p:pic>
+    </p:spTree>
+  </p:cSld>
+  <p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr>
+</p:sld>`;
+  }
+
+  function containBox(width, height, maxCx, maxCy) {
+    const scale = Math.min(maxCx / width, maxCy / height);
+    const cx = Math.round(width * scale);
+    const cy = Math.round(height * scale);
+    return { x: Math.round((maxCx - cx) / 2), y: Math.round((maxCy - cy) / 2), cx, cy };
+  }
+
+  function buildSlideMasterXml() {
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<p:sldMaster xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main">
+  <p:cSld><p:spTree><p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/><a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr></p:spTree></p:cSld>
+  <p:clrMap bg1="lt1" tx1="dk1" bg2="lt2" tx2="dk2" accent1="accent1" accent2="accent2" accent3="accent3" accent4="accent4" accent5="accent5" accent6="accent6" hlink="hlink" folHlink="folHlink"/>
+  <p:sldLayoutIdLst><p:sldLayoutId id="2147483649" r:id="rId1"/></p:sldLayoutIdLst>
+  <p:txStyles><p:titleStyle/><p:bodyStyle/><p:otherStyle/></p:txStyles>
+</p:sldMaster>`;
+  }
+
+  function buildSlideLayoutXml() {
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<p:sldLayout xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" type="blank" preserve="1">
+  <p:cSld name="Blank"><p:spTree><p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/><a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr></p:spTree></p:cSld>
+  <p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr>
+</p:sldLayout>`;
+  }
+
+  function buildThemeXml() {
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="Filehidache">
+  <a:themeElements>
+    <a:clrScheme name="Office"><a:dk1><a:sysClr val="windowText" lastClr="000000"/></a:dk1><a:lt1><a:sysClr val="window" lastClr="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="1F2937"/></a:dk2><a:lt2><a:srgbClr val="F8FAFC"/></a:lt2><a:accent1><a:srgbClr val="2563EB"/></a:accent1><a:accent2><a:srgbClr val="16A34A"/></a:accent2><a:accent3><a:srgbClr val="F97316"/></a:accent3><a:accent4><a:srgbClr val="9333EA"/></a:accent4><a:accent5><a:srgbClr val="0891B2"/></a:accent5><a:accent6><a:srgbClr val="DC2626"/></a:accent6><a:hlink><a:srgbClr val="2563EB"/></a:hlink><a:folHlink><a:srgbClr val="9333EA"/></a:folHlink></a:clrScheme>
+    <a:fontScheme name="Office"><a:majorFont><a:latin typeface="Arial"/><a:ea typeface=""/><a:cs typeface=""/></a:majorFont><a:minorFont><a:latin typeface="Arial"/><a:ea typeface=""/><a:cs typeface=""/></a:minorFont></a:fontScheme>
+    <a:fmtScheme name="Office"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill></a:bgFillStyleLst></a:fmtScheme>
+  </a:themeElements>
+</a:theme>`;
   }
 
   async function extractPdfText(file) {
@@ -1959,6 +2256,120 @@
       lines.push(content.items.map((item) => item.str).join(" "));
     }
     return lines.join("\n");
+  }
+
+  async function extractPptSlides(file) {
+    const zip = await JSZip.loadAsync(await file.arrayBuffer());
+    const slides = Object.keys(zip.files).filter((name) => /^ppt\/slides\/slide\d+\.xml$/i.test(name)).sort(naturalSort);
+    return Promise.all(slides.map(async (slide, index) => ({
+      title: `Slide ${index + 1}`,
+      text: xmlText(await zip.file(slide).async("string"))
+    })));
+  }
+
+  async function slidesToPdf(slides, sourceName) {
+    const pdf = await PDFLib.PDFDocument.create();
+    for (const slide of slides.length ? slides : [{ title: sourceName, text: "" }]) {
+      const blob = await slideCanvas(slide.title, slide.text);
+      const image = await pdf.embedPng(new Uint8Array(await blob.arrayBuffer()));
+      const page = pdf.addPage([960, 540]);
+      page.drawImage(image, { x: 0, y: 0, width: 960, height: 540 });
+    }
+    return blobFromBytes(await pdf.save(), "application/pdf");
+  }
+
+  async function slideCanvas(title, text) {
+    const canvas = document.createElement("canvas");
+    canvas.width = 1600;
+    canvas.height = 900;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#111827";
+    ctx.font = "700 44px Arial, Microsoft YaHei, sans-serif";
+    ctx.fillText(title, 80, 76);
+    ctx.font = "28px Arial, Microsoft YaHei, sans-serif";
+    let y = 150;
+    wrapCanvasText(text, 1440, ctx.font).slice(0, 22).forEach((line) => {
+      ctx.fillText(line, 80, y);
+      y += 38;
+    });
+    return canvasToBlob(canvas, "image/png", 0.92);
+  }
+
+  async function extractXlsxSheets(file) {
+    const zip = await JSZip.loadAsync(await file.arrayBuffer());
+    const sharedXml = await zip.file("xl/sharedStrings.xml")?.async("string");
+    const shared = sharedXml ? nodesByLocalName(new DOMParser().parseFromString(sharedXml, "application/xml"), "t").map((node) => node.textContent || "") : [];
+    const sheets = Object.keys(zip.files).filter((name) => /^xl\/worksheets\/sheet\d+\.xml$/i.test(name)).sort(naturalSort);
+    return Promise.all(sheets.map(async (sheet, index) => ({ name: `Sheet ${index + 1}`, rows: await worksheetRows(zip, sheet, shared) })));
+  }
+
+  async function worksheetRows(zip, sheet, shared) {
+    const doc = new DOMParser().parseFromString(await zip.file(sheet).async("string"), "application/xml");
+    const rows = [];
+    nodesByLocalName(doc, "row").forEach((row) => {
+      const values = [];
+      nodesByLocalName(row, "c").forEach((cell) => {
+        const ref = cell.getAttribute("r") || "";
+        const col = columnIndex(ref.replace(/\d+/g, "")) || values.length;
+        const raw = nodesByLocalName(cell, "v")[0]?.textContent || "";
+        values[col] = cell.getAttribute("t") === "s" ? shared[Number(raw)] || "" : raw;
+      });
+      rows.push(values.map((value) => value || ""));
+    });
+    const width = rows.reduce((max, row) => Math.max(max, row.length), 0);
+    return rows.map((row) => Array.from({ length: width }, (_, i) => row[i] || ""));
+  }
+
+  function csvRows(text) {
+    return String(text || "").split(/\r?\n/).filter(Boolean).map((line) => line.split(",").map((cell) => cell.replace(/^"|"$/g, "").replace(/""/g, '"')));
+  }
+
+  function columnIndex(letters) {
+    return Array.from(String(letters || "").toUpperCase()).reduce((sum, char) => sum * 26 + char.charCodeAt(0) - 64, 0) - 1;
+  }
+
+  async function sheetsToPdf(sheets, sourceName) {
+    const pdf = await PDFLib.PDFDocument.create();
+    for (const sheet of sheets) {
+      const rows = sheet.rows.filter((row) => row.some(Boolean));
+      const colCount = rows.reduce((max, row) => Math.max(max, row.length), 1);
+      const cellWidth = 110;
+      const rowHeight = 32;
+      const pageWidth = Math.max(360, colCount * cellWidth + 48);
+      const rowsPerPage = 24;
+      for (let start = 0; start < Math.max(rows.length, 1); start += rowsPerPage) {
+        const chunk = rows.slice(start, start + rowsPerPage);
+        const pageHeight = Math.max(180, chunk.length * rowHeight + 92);
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.ceil(pageWidth * 2);
+        canvas.height = Math.ceil(pageHeight * 2);
+        const ctx = canvas.getContext("2d");
+        ctx.scale(2, 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, pageWidth, pageHeight);
+        ctx.font = "700 16px Arial, Microsoft YaHei, sans-serif";
+        ctx.fillStyle = "#111827";
+        ctx.fillText(`${sourceName} - ${sheet.name}`, 24, 18);
+        ctx.font = "13px Arial, Microsoft YaHei, sans-serif";
+        chunk.forEach((row, rowIndex) => {
+          row.forEach((cell, colIndex) => {
+            const x = 24 + colIndex * cellWidth;
+            const y = 48 + rowIndex * rowHeight;
+            ctx.strokeStyle = "#cbd5e1";
+            ctx.strokeRect(x, y, cellWidth, rowHeight);
+            ctx.fillStyle = "#111827";
+            ctx.fillText(String(cell).slice(0, 18), x + 6, y + 9);
+          });
+        });
+        const png = await canvasToBlob(canvas, "image/png", 0.92);
+        const image = await pdf.embedPng(new Uint8Array(await png.arrayBuffer()));
+        const page = pdf.addPage([pageWidth, pageHeight]);
+        page.drawImage(image, { x: 0, y: 0, width: pageWidth, height: pageHeight });
+      }
+    }
+    return blobFromBytes(await pdf.save(), "application/pdf");
   }
 
   async function extractOfficeText(file, kind) {
@@ -2001,7 +2412,8 @@
     return out.join("\n");
   }
 
-  async function textToPdf(title, text) {
+  async function textToPdf(title, text, options = {}) {
+    if (options.preserveUnicode) return textCanvasToPdf(title, text);
     const pdf = await PDFLib.PDFDocument.create();
     const font = await pdf.embedFont(PDFLib.StandardFonts.Helvetica);
     let page = pdf.addPage([595.28, 841.89]);
@@ -2018,6 +2430,62 @@
       y -= 14;
     }
     return blobFromBytes(await pdf.save(), "application/pdf");
+  }
+
+  async function textCanvasToPdf(title, text) {
+    const pdf = await PDFLib.PDFDocument.create();
+    const pageWidth = 1240;
+    const pageHeight = 1754;
+    const margin = 92;
+    const lineHeight = 28;
+    const bodyWidth = pageWidth - margin * 2;
+    const lines = wrapCanvasText([title, "", text].join("\n"), bodyWidth, "20px Arial, Microsoft YaHei, sans-serif");
+    for (let start = 0; start < lines.length; start += 54) {
+      const canvas = document.createElement("canvas");
+      canvas.width = pageWidth;
+      canvas.height = pageHeight;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, pageWidth, pageHeight);
+      ctx.fillStyle = "#0f172a";
+      ctx.textBaseline = "top";
+      let y = margin;
+      lines.slice(start, start + 54).forEach((line, index) => {
+        ctx.font = index === 0 && start === 0 ? "700 30px Arial, Microsoft YaHei, sans-serif" : "20px Arial, Microsoft YaHei, sans-serif";
+        ctx.fillText(line, margin, y);
+        y += index === 0 && start === 0 ? 46 : lineHeight;
+      });
+      const png = await canvasToBlob(canvas, "image/png", 0.92);
+      const image = await pdf.embedPng(new Uint8Array(await png.arrayBuffer()));
+      const page = pdf.addPage([595.28, 841.89]);
+      page.drawImage(image, { x: 0, y: 0, width: 595.28, height: 841.89 });
+    }
+    return blobFromBytes(await pdf.save(), "application/pdf");
+  }
+
+  function wrapCanvasText(text, maxWidth, font) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.font = font;
+    const output = [];
+    String(text || "").split(/\r?\n/).forEach((paragraph) => {
+      if (!paragraph) {
+        output.push("");
+        return;
+      }
+      let line = "";
+      Array.from(paragraph).forEach((char) => {
+        const next = line + char;
+        if (ctx.measureText(next).width > maxWidth && line) {
+          output.push(line);
+          line = char;
+        } else {
+          line = next;
+        }
+      });
+      output.push(line);
+    });
+    return output;
   }
 
   function xmlText(xml) {

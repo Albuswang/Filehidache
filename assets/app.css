@@ -810,6 +810,18 @@ p {
   line-height: 1.55;
 }
 
+.downloads-title {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.downloads-title .btn {
+  width: 100%;
+  min-height: 42px;
+  white-space: nowrap;
+}
+
 .status-pill {
   white-space: nowrap;
   border-radius: 999px;
@@ -880,7 +892,8 @@ p {
 }
 
 .file-row,
-.result-row {
+.result-row,
+.result-empty {
   border: 1px solid rgba(195, 198, 215, 0.85);
   border-radius: 14px;
   background: #ffffff;
@@ -888,6 +901,27 @@ p {
   display: flex;
   align-items: center;
   gap: 14px;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.result-empty {
+  display: block;
+  padding: 16px;
+}
+
+.result-empty .result-name {
+  white-space: normal;
+}
+
+.result-empty .result-meta {
+  -webkit-line-clamp: 3;
+}
+
+.result-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) minmax(112px, auto);
 }
 
 .file-row.is-selected {
@@ -899,6 +933,7 @@ p {
 .result-main {
   min-width: 0;
   flex: 1;
+  overflow: hidden;
 }
 
 .file-name,
@@ -907,6 +942,24 @@ p {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 850;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.file-row .icon-button,
+.result-row .btn {
+  flex: 0 0 auto;
+}
+
+.result-row .tool-icon {
+  width: 48px;
+  height: 48px;
+}
+
+.result-row .btn {
+  min-width: 112px;
+  padding-inline: 18px;
+  white-space: nowrap;
 }
 
 .file-meta,
@@ -914,6 +967,26 @@ p {
   color: var(--muted);
   font-size: 13px;
   margin-top: 4px;
+}
+
+.result-meta {
+  display: -webkit-box;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.35;
+}
+
+.docx-render-host {
+  position: fixed;
+  left: -20000px;
+  top: 0;
+  width: max-content;
+  min-width: 1px;
+  background: #ffffff;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .icon-button {
@@ -1066,6 +1139,15 @@ p {
   background: var(--primary-soft);
   padding: 15px;
   margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.download-summary strong {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .download-summary.is-visible {
@@ -1346,16 +1428,16 @@ html[lang="zh-CN"] .brief-metrics span {
 }
 
 html[lang="zh-CN"] .workspace {
-  grid-template-columns: 248px minmax(0, 1fr) 360px;
-  gap: 20px;
+  grid-template-columns: 260px minmax(0, 1fr) 320px;
+  gap: 18px;
 }
 
 html[lang="zh-CN"] .panel {
-  padding: 20px;
+  padding: 18px;
 }
 
 html[lang="zh-CN"] .dropzone {
-  padding: 30px;
+  padding: 26px;
 }
 
 html[lang="zh-CN"] .dropzone h3 {
@@ -1364,14 +1446,17 @@ html[lang="zh-CN"] .dropzone h3 {
 
 html[lang="zh-CN"] .file-row,
 html[lang="zh-CN"] .result-row {
-  padding: 16px;
-  gap: 12px;
+  padding: 14px;
+  gap: 14px;
 }
 
 html[lang="zh-CN"] .file-name,
 html[lang="zh-CN"] .result-name {
   line-height: 1.45;
   white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 html[lang="zh-CN"] .file-meta,
